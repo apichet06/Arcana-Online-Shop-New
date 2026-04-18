@@ -32,12 +32,6 @@ type CategoryGroup = {
     c_sort_order: number
 }
 
-type ProductWithCategory = {
-    id: string | number
-    st_id?: string | number
-    c_id?: string | number
-    categoryId?: string | number
-}
 
 function groupCategories(categories: Category[]): CategoryGroup[] {
     const map = new Map<number, CategoryGroup>()

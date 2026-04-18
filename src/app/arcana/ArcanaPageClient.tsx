@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import ArcanaHero from "@/components/arcana/ArcanaHero"
-import FullWidthHeroSlider from "@/components/arcana/FullWidthHeroSlider"
+
 import ArcanaProductSection from "@/components/arcana/product/ArcanaProductSection"
 import WhatIsArcanaSection from "@/components/arcana/WhatIsArcanaSection"
 
