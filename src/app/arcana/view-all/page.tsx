@@ -2,6 +2,7 @@
 
 import type { Metadata } from "next"
 import ViewAllClient from "./ViewAllClient"
+import { getCategories } from "@/features/products/api/get-category"
 
 export const metadata: Metadata = {
     title: "สินค้าทั้งหมด | Arcana",
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
 }
 
 export default async function ViewAllPage() {
+
     return <ViewAllClient />
 }
 

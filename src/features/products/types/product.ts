@@ -19,6 +19,7 @@ export type ProductApiItem = {
     c_id: number
     ctl_id: number
     ctl_name: string
+    st_id: number
     b_id: number
     b_name: string
     has_price_range: number
@@ -49,6 +50,7 @@ export type Product = {
     discount: number
     website: WebsiteKey
     catalogId: number
+    categoryId: number
     catalogName: string
     brandName: string
     tags: ProductTag[]
@@ -58,4 +60,6 @@ export type Product = {
     reviewCount?: number
     isFeatured: boolean
     isActive: boolean
+    st_id: number
+
 }

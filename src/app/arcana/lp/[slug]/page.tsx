@@ -4,7 +4,7 @@ import { GetLandingPage } from "@/features/products/api/get-landingpage"
 import LandingPageDetailView from "./LandingPageDetailView"
 import { SITE_URL } from "@/lib/api_base"
 import { getLpSlugs } from "@/features/products/api/get-landingpageSluge"
-
+import { cookies } from "next/headers"
 
 type Props = {
     params: Promise<{
@@ -53,16 +53,22 @@ export function getDescriptionFromLexical(jsonString?: string, maxLength = 160):
 
 export async function generateStaticParams() {
     try {
-        const slugs = await getLpSlugs();
+        const slugs = await getLpSlugs()
 
-        return slugs.map((item) => ({
-            slug: item.lp_slug,
-        }));
+        const params = (slugs ?? [])
+            .filter((item) => typeof item?.lp_slug === "string" && item.lp_slug.trim() !== "")
+            .map((item) => ({
+                slug: encodeURIComponent(item.lp_slug.trim()),
+            }))
+
+        // console.log("generateStaticParams slugs:", params)
+        return params
     } catch (error) {
-        console.error("Failed to fetch landing page slugs:", error);
-        return [];
+        console.error("Failed to fetch landing page slugs:", error)
+        throw error
     }
 }
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params
@@ -135,15 +141,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LandingPageDetail({ params }: Props) {
     const { slug } = await params
-    const landingPageData = await GetLandingPage({ slug })
-
-    const landingPage = Array.isArray(landingPageData)
-        ? landingPageData[0]
-        : landingPageData
-
-    if (!landingPage) {
-        notFound()
-    }
-
-    return <LandingPageDetailView landingPage={landingPage} />
+    return <LandingPageDetailView slug={slug} />
 }

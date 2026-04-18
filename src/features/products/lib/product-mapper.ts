@@ -25,12 +25,15 @@ export function mapProduct(item: ProductApiItem): Product {
         discount: item.discount,
         website: mapCtlIdToWebsite(item.ctl_id),
         catalogId: item.ctl_id,
+        categoryId: item.c_id,
         catalogName: item.ctl_name,
+        st_id: item.st_id,
         brandName: item.b_name,
         tags: item.tags || [],
         isBestSeller: hasTag(item, PRODUCT_TAGS.BEST_SELLER),
         isNew: hasTag(item, PRODUCT_TAGS.NEW),
         isFeatured: hasTag(item, PRODUCT_TAGS.FEATURED),
+        isActive: item.p_isActive === 1,
         //   mock ตรงนี้
         rating: 4 + Math.random(),       // 4.0 - 5.0
         reviewCount: Math.floor(Math.random() * 50) + 1,

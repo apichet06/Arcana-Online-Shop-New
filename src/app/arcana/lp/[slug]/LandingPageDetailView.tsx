@@ -3,20 +3,12 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import ProductDescriptionLexical from "@/components/arcana/product/ProductDescriptionLexical"
-
-
-type LandingPageItem = {
-    lp_id: number
-    lp_title: string
-    lp_description?: string | null
-    lp_slug?: string
-    lp_seo_title?: string | null
-    lp_seo_description?: string | null
-    lg_code?: string
-}
+import { formatPrice } from "@/lib/format-price"
+import { useLanguage } from "@/features/products/hooks/use-language"
+import useLandingPage from "@/features/products/hooks/use-landingpage"
 
 type Props = {
-    landingPage: LandingPageItem
+    slug: string
 }
 
 const container = {
@@ -40,7 +32,29 @@ const fadeUp = {
     },
 }
 
-export default function LandingPageDetailView({ landingPage }: Props) {
+export default function LandingPageDetailView({ slug }: Props) {
+
+
+    const { lang } = useLanguage()
+    const { data: landingPage, loading } = useLandingPage(slug, lang,)
+
+    if (!landingPage || loading) return <div className="py-20 text-center text-slate-500">Loading...</div>
+
+    const minPrice = Number(landingPage.min_price || 0)
+    const maxPrice = Number(landingPage.max_price || 0)
+    const discountPercent = Number(landingPage.discount || 0)
+
+    const hasPriceRange = maxPrice > minPrice
+    const hasDiscount = discountPercent > 0
+
+    const discountedMinPrice = hasDiscount
+        ? minPrice - (minPrice * discountPercent) / 100
+        : minPrice
+
+    const discountedMaxPrice = hasDiscount
+        ? maxPrice - (maxPrice * discountPercent) / 100
+        : maxPrice
+
     return (
         <main className="relative min-h-screen overflow-hidden bg-[linear-gradient(180deg,#edf6ff_0%,#f8fbff_38%,#ffffff_100%)] text-slate-900">
             {/* background glow */}
@@ -50,21 +64,111 @@ export default function LandingPageDetailView({ landingPage }: Props) {
                 <div className="absolute bottom-[-10%] left-[20%] h-65 w-65 rounded-full bg-cyan-200/20 blur-3xl" />
             </div>
 
+            {/* floating edge card - desktop only */}
+            <div className="pointer-events-none fixed right-0 top-1/2 z-50 hidden -translate-y-1/2 lg:block">
+                <motion.div
+                    initial={{ x: 140, opacity: 0 }}
+                    animate={{ x: 200, opacity: 1 }}
+                    whileHover={{ x: -10 }}
+                    transition={{
+                        duration: 0.7,
+                        ease: [0.22, 1, 0.36, 1],
+                    }}
+                    className="pointer-events-auto relative"
+                >
+                    <div className="flex items-center">
+                        {/* side tab */}
+                        <div className="relative z-10 -mr-2 flex h-36 w-14 items-center justify-center rounded-l-3xl border border-white/70 border-r-0 bg-[linear-gradient(180deg,rgba(15,23,42,0.96),rgba(12,74,110,0.92))] px-2 shadow-[0_20px_50px_rgba(2,6,23,0.22)] backdrop-blur-2xl">
+                            <span className="select-none text-[11px] font-semibold uppercase tracking-[0.24em] text-white [writing-mode:vertical-rl]">
+                                Buy
+                            </span>
+                        </div>
+
+                        {/* main card */}
+                        <div className="w-72 overflow-hidden rounded-[30px] border border-white/70 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,255,255,0.78))] shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-2xl transition duration-500 ease-out hover:shadow-[0_28px_90px_rgba(15,23,42,0.20)]">
+                            <div className="relative overflow-hidden px-6 py-6">
+                                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(186,230,253,0.24),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.35),transparent)]" />
+
+                                <div className="relative z-10">
+                                    <div className="inline-flex items-center rounded-full border border-sky-100 bg-white/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700 shadow-sm">
+                                        Product Access
+                                    </div>
+
+                                    <h3 className="mt-4 line-clamp-2 text-lg font-semibold leading-snug text-slate-900">
+                                        {landingPage.p_name}
+                                    </h3>
+
+                                    <div className="mt-3 space-y-2">
+                                        <p className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+                                            Price
+                                        </p>
+
+                                        {hasDiscount ? (
+                                            <>
+                                                <div className="flex flex-wrap items-baseline gap-2">
+                                                    {hasPriceRange ? (
+                                                        <span className="text-xl font-bold text-slate-900">
+                                                            {formatPrice(discountedMinPrice)} - {formatPrice(discountedMaxPrice)}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-xl font-bold text-slate-900">
+                                                            {formatPrice(discountedMinPrice)}
+                                                        </span>
+                                                    )}
+
+                                                    <span className="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-semibold text-rose-600">
+                                                        -{discountPercent}%
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex flex-wrap items-baseline gap-2">
+                                                    {hasPriceRange ? (
+                                                        <span className="text-sm text-slate-400 line-through">
+                                                            {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-sm text-slate-400 line-through">
+                                                            {formatPrice(minPrice)}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="flex flex-wrap items-baseline gap-2">
+                                                {hasPriceRange ? (
+                                                    <span className="text-xl font-bold text-slate-900">
+                                                        {formatPrice(minPrice)} - {formatPrice(maxPrice)}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xl font-bold text-slate-900">
+                                                        {formatPrice(minPrice)}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="mt-5 border-t border-slate-200/70 pt-5">
+                                        <Link
+                                            href={`../../product/${landingPage.p_id}`}
+                                            className="inline-flex w-full items-center justify-center rounded-full bg-blue-950 px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:bg-sky-900"
+                                        >
+                                            เลือกซื้อสินค้า
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
             <motion.div
                 variants={container}
                 initial="hidden"
                 animate="show"
                 className="relative mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12"
             >
-                {/* top back */}
-                <motion.div variants={fadeUp} className="mb-6">
-                    <Link
-                        href="/arcana"
-                        className="inline-flex items-center rounded-full border border-white/80 bg-white/80 px-4 py-2 text-sm font-medium text-slate-600 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:text-sky-700"
-                    >
-                        ← กลับหน้า Arcana
-                    </Link>
-                </motion.div>
 
                 {/* hero */}
                 <motion.section
@@ -111,16 +215,16 @@ export default function LandingPageDetailView({ landingPage }: Props) {
                         >
                             <a
                                 href="#lp-content"
-                                className="inline-flex items-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:bg-sky-900"
+                                className="inline-flex   items-center justify-center rounded-full bg-blue-950 px-5 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(15,23,42,0.18)] transition hover:-translate-y-0.5 hover:bg-sky-900"
                             >
                                 ดูรายละเอียด
                             </a>
-
                             <Link
-                                href="/arcana"
+                                href={`../../product/${landingPage.p_id}`}
                                 className="inline-flex items-center rounded-full border border-slate-200 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-700 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-sky-200 hover:text-sky-700"
+
                             >
-                                กลับหน้าแรก
+                                กลับหน้าก่อนหน้า
                             </Link>
                         </motion.div>
                     </div>

@@ -6,15 +6,13 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import {
     ProductOptionGroup,
-    ProductShopByIdData,
     ProductVariant,
 } from "@/features/products/types/ProductShopById"
 import ProductDescriptionLexical from "@/components/arcana/product/ProductDescriptionLexical"
 import { API_BASE_URL } from "@/lib/api"
-import { DEFAULT_LANGUAGE, Language, LANGUAGE_COOKIE } from "@/lib/i18n"
-import { getCookie, getInitialLanguage } from "@/lib/cookies"
-
-import { getProductById } from "@/features/products/api/get-product-by-id"
+import { getDiscountedPrice } from "@/lib/format-price"
+import { useProductById } from "@/features/products/hooks/use-productById"
+import { useLanguage } from "@/features/products/hooks/use-language"
 
 type Props = {
     id: number
@@ -88,8 +86,9 @@ function parseVariantLabel(label?: string | null) {
 export default function ProductDetailClient({ id }: Props) {
 
 
-    const [lang, setLang] = useState<Language>(getInitialLanguage)
-    const [data, setData] = useState<ProductShopByIdData | null>(null)
+
+    const { lang } = useLanguage()
+    const { data } = useProductById(id, lang)
 
     const [selectedImage, setSelectedImage] = useState("")
     const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null)
@@ -98,40 +97,16 @@ export default function ProductDetailClient({ id }: Props) {
     const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({})
 
     useEffect(() => {
-        const cookieLang = getCookie(LANGUAGE_COOKIE) || DEFAULT_LANGUAGE
-        if (cookieLang !== lang) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setLang(cookieLang as Language)
-        }
-    }, [lang])
-
-    useEffect(() => {
-        let cancelled = false
-
-        async function loadProducts() {
-            const result = await getProductById({
-                p_id: Number(id),
-                lang,
-            })
-
-            if (!cancelled) {
-                setData(result)
-            }
-        }
-
-        loadProducts()
-
-        return () => {
-            cancelled = true
-        }
-    }, [id, lang])
-
-    useEffect(() => {
         if (!data) return
 
+        // const defaultVariant =
+        //     data.variants.find((v) => v.is_default === 1) || data.variants[0] || null
         const defaultVariant =
-            data.variants.find((v) => v.is_default === 1) || data.variants[0] || null
-
+            data.variants.find((v) => v.is_default === 1 && Number(v.available_qty) > 0) ||
+            data.variants.find((v) => Number(v.available_qty) > 0) ||
+            data.variants.find((v) => v.is_default === 1) ||
+            data.variants[0] ||
+            null
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedVariant(defaultVariant)
         setSelectedOptions(parseVariantLabel(defaultVariant?.variant_label))
@@ -151,7 +126,7 @@ export default function ProductDetailClient({ id }: Props) {
             return
         }
 
-        const stock = Number(selectedVariant.on_hand || 0)
+        const stock = Number(selectedVariant.available_qty || 0)
 
         if (stock <= 0) {
             setQuantity(1)
@@ -162,11 +137,20 @@ export default function ProductDetailClient({ id }: Props) {
             setQuantity(stock)
         }
     }, [selectedVariant, quantity])
+
     const displayPrice = useMemo(() => {
         if (!data) return ""
 
         if (selectedVariant) {
-            return formatPrice(selectedVariant.pv_price)
+            const originalPrice = Number(selectedVariant.pv_price || 0)
+            const discountPercent = Number(selectedVariant.discount || 0)
+            const finalPrice = getDiscountedPrice(originalPrice, discountPercent)
+
+            if (discountPercent > 0) {
+                return `${formatPrice(finalPrice)}`
+            }
+
+            return formatPrice(originalPrice)
         }
 
         const { min_price, max_price, has_price_range } = data.product
@@ -208,7 +192,7 @@ export default function ProductDetailClient({ id }: Props) {
 
     const increaseQuantity = () => {
         if (!selectedVariant) return
-        const stock = Number(selectedVariant.on_hand || 0)
+        const stock = Number(selectedVariant.available_qty || 0)
         setQuantity((prev) => Math.min(prev + 1, stock || 1))
     }
 
@@ -229,7 +213,7 @@ export default function ProductDetailClient({ id }: Props) {
             return
         }
 
-        const stock = Number(selectedVariant.on_hand || 0)
+        const stock = Number(selectedVariant.available_qty || 0)
 
         if (stock <= 0) {
             setQuantity(1)
@@ -322,7 +306,7 @@ export default function ProductDetailClient({ id }: Props) {
                                         >
                                             <Image
                                                 src={toImageUrl(variant.image_url)}
-                                                alt={variant.variant_label}
+                                                alt={variant.variant_label as string}
                                                 fill
                                                 className="object-cover"
                                             />
@@ -347,22 +331,46 @@ export default function ProductDetailClient({ id }: Props) {
                                 </h1>
                             </div>
 
+
                             <div className="rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-4">
                                 <p className="text-sm text-slate-500">ราคา</p>
+
                                 <AnimatePresence mode="wait">
-                                    <motion.p
-                                        key={displayPrice}
+                                    <motion.div
+                                        key={`${selectedVariant?.pv_id || "default"}-${selectedVariant?.discount || 0}-${selectedVariant?.pv_price || 0}`}
                                         initial={{ opacity: 0, y: 6 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -6 }}
                                         transition={{ duration: 0.2 }}
-                                        className="mt-1 text-2xl font-bold text-slate-900"
+                                        className="mt-1"
                                     >
-                                        {displayPrice}
-                                    </motion.p>
+                                        {selectedVariant && Number(selectedVariant.discount || 0) > 0 ? (
+                                            <div className="flex flex-col gap-1">
+                                                <p className="text-sm text-slate-400 line-through">
+                                                    {formatPrice(Number(selectedVariant.pv_price || 0))}
+                                                </p>
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-2xl font-bold text-sky-700">
+                                                        {formatPrice(
+                                                            getDiscountedPrice(
+                                                                Number(selectedVariant.pv_price || 0),
+                                                                Number(selectedVariant.discount || 0)
+                                                            )
+                                                        )}
+                                                    </p>
+                                                    <span className="rounded-full bg-rose-100 px-2 py-0.5 text-xs font-semibold text-rose-600">
+                                                        -{Number(selectedVariant.discount || 0)}%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <p className="text-2xl font-bold text-slate-900">
+                                                {displayPrice}
+                                            </p>
+                                        )}
+                                    </motion.div>
                                 </AnimatePresence>
                             </div>
-
                             {selectedVariant && (
                                 <div className="rounded-2xl border border-slate-200 bg-white p-4">
                                     <p className="text-sm font-medium text-slate-800">ตัวเลือกที่เลือก</p>
@@ -376,7 +384,7 @@ export default function ProductDetailClient({ id }: Props) {
 
                                         <div className="rounded-xl bg-slate-50 p-3">
                                             <span className="block text-xs text-slate-400">คงเหลือ</span>
-                                            {selectedVariant.on_hand} {selectedVariant.unit_name}
+                                            {selectedVariant.available_qty} {selectedVariant.unit_name}
                                         </div>
                                     </div>
                                 </div>
@@ -443,7 +451,7 @@ export default function ProductDetailClient({ id }: Props) {
                                         <input
                                             type="number"
                                             min={1}
-                                            max={selectedVariant?.on_hand || 1}
+                                            max={selectedVariant?.available_qty || 1}
                                             value={quantity}
                                             onChange={(e) => handleQuantityChange(e.target.value)}
                                             className="h-12 w-20 border-x border-slate-200 text-center text-sm font-semibold text-slate-900 outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
@@ -454,7 +462,7 @@ export default function ProductDetailClient({ id }: Props) {
                                             onClick={increaseQuantity}
                                             disabled={
                                                 !selectedVariant ||
-                                                quantity >= Number(selectedVariant.on_hand || 0)
+                                                quantity >= Number(selectedVariant.available_qty || 0)
                                             }
                                             className="flex h-12 w-12 items-center justify-center text-lg font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                                         >
@@ -464,7 +472,7 @@ export default function ProductDetailClient({ id }: Props) {
 
                                     <p className="text-sm text-slate-500">
                                         {selectedVariant
-                                            ? `มีสินค้า ${selectedVariant.on_hand} ${selectedVariant.unit_name}`
+                                            ? `มีสินค้า ${selectedVariant.available_qty} ${selectedVariant.unit_name}`
                                             : "กรุณาเลือกตัวเลือกสินค้า"}
                                     </p>
                                 </div>
@@ -472,7 +480,7 @@ export default function ProductDetailClient({ id }: Props) {
                             <div className="grid gap-3 pt-2 sm:grid-cols-2">
                                 <button
                                     type="button"
-                                    disabled={!selectedVariant || Number(selectedVariant.on_hand || 0) <= 0}
+                                    disabled={!selectedVariant || Number(selectedVariant.available_qty || 0) <= 0}
                                     onClick={() => {
                                         if (!selectedVariant) return
 

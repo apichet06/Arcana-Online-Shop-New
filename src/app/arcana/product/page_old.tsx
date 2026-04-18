@@ -282,7 +282,7 @@ export default function ProductDetailPagePId() {
                                         >
                                             <Image
                                                 src={toImageUrl(variant.image_url)}
-                                                alt={variant.variant_label}
+                                                alt={variant.variant_label as string}
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             />
@@ -355,7 +355,7 @@ export default function ProductDetailPagePId() {
                                                 className="rounded-xl bg-slate-50 p-3"
                                             >
                                                 <span className="block text-xs text-slate-400">คงเหลือ</span>
-                                                {selectedVariant.on_hand} {selectedVariant.unit_name}
+                                                {selectedVariant.available_qty} {selectedVariant.unit_name}
                                             </motion.div>
                                         </div>
                                     </motion.div>

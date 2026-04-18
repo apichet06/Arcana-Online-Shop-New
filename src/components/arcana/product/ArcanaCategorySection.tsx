@@ -73,10 +73,16 @@ export default function ArcanaCategorySection({ categories }: Props) {
     return (
         <section className="relative overflow-hidden py-16 sm:py-20">
             {/* Background */}
-            <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,rgba(186,230,253,0.35),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(147,197,253,0.20),transparent_30%),linear-gradient(to_bottom,#f8fbff,#eef5ff,#f8fbff)]" />
-            <div className="absolute inset-0 -z-10 opacity-30 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-size-[28px_28px]" />
+            {/* <div className="absolute inset-0 z-0 bg-amber-300" />
+            <div className="relative z-10">...</div> */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.22),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(14,165,233,0.18),transparent_30%),linear-gradient(to_bottom,#f8fbff,#eef5ff,#f8fbff)]" />
 
-            <div className="mx-auto w-full max-w-7xl px-6 lg:px-8">
+            <div className="absolute inset-0 z-1 bg-[repeating-linear-gradient(45deg,rgba(148,163,184,0.05)_0px,rgba(148,163,184,0.05)_1px,transparent_1px,transparent_18px)]" />
+            {/* <div className="absolute inset-0 z-1 bg-[linear-gradient(to_right,rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-size-[28px_28px]" /> */}
+            {/* <div className="absolute inset-0 z-[1] bg-[radial-gradient(rgba(148,163,184,0.18)_1px,transparent_1px)] [background-size:22px_22px]" /> */}
+
+
+            <div className="relative z-10 mx-auto max-w-7xl px-6">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
@@ -95,7 +101,7 @@ export default function ArcanaCategorySection({ categories }: Props) {
                     </h2>
 
                     <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">
-                        เลือกชมสินค้าในแต่ละหมวดหมู่ได้อย่างสะดวก พร้อมดีไซน์ที่เรียบหรูและทันสมัย
+                        เลือกชมสินค้าในแต่ละหมวดหมู่ได้อย่างสะดวก
                     </p>
                 </motion.div>
 

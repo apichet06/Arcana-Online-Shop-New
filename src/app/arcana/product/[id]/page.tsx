@@ -45,7 +45,7 @@ export function buildProductJsonLd(data: ProductShopByIdData, productId: number)
         "/images/placeholder.png"
 
     const price = defaultVariant?.pv_price ?? product.min_price ?? 0
-    const totalStock = variants.reduce((sum, variant) => sum + Number(variant.on_hand || 0), 0)
+    const totalStock = variants.reduce((sum, variant) => sum + Number(variant.available_qty || 0), 0)
 
     const description =
         getDescriptionFromLexical(product.p_description)?.slice(0, 160) ||

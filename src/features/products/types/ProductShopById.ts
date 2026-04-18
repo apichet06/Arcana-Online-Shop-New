@@ -17,15 +17,16 @@ export type ProductVariant = {
     discount: number
     is_default: number
     image_url: string | null
-    weight_g: string
-    length_cm: string
-    width_cm: string
-    height_cm: string
-    unit_id: number
-    unit_name: string
-    on_hand: number
-    reserved_qty: number
-    variant_label: string
+    weight_g: string | null
+    length_cm: string | null
+    width_cm: string | null
+    height_cm: string | null
+    unit_id: number | null
+    unit_name: string | null
+    total_on_hand: number
+    total_reserved_qty: number
+    available_qty: number
+    variant_label: string | null
 }
 
 export type ProductOptionItem = {
@@ -105,7 +106,10 @@ export type LandingPageProduct = {
     lp_description: string
     lp_seo_title?: string | null
     lp_seo_description?: string | null
-
+    p_name: string
+    max_price: number
+    min_price: number
+    discount: number
 }
 
 

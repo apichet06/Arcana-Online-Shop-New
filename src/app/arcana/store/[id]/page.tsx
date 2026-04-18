@@ -1,3 +1,6 @@
+import { storeShopServie } from "@/features/products/api/get-storeShop"
+import StoreDetailCient from "./storeDetailCient"
+
 type Props = {
     params: Promise<{
         id: string
@@ -5,17 +8,20 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-    return [
-        { id: "1" },
-        { id: "2" },
-        { id: "3" },
-    ]
+    const stores = await storeShopServie.getStoreShop()
+
+    const params = stores.map((store) => ({
+        id: String(store.st_id),
+    }))
+
+    return params
 }
+
 
 export default async function Page({ params }: Props) {
     const { id } = await params
 
     return (
-        <div>Store ID: {id}</div>
+        <StoreDetailCient st_id={id} />
     )
 }

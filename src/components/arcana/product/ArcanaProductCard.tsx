@@ -98,6 +98,20 @@ export default function ArcanaProductCard({ product }: Props) {
         rotateY.set(0)
     }
 
+
+    const discountPercent = Number(product.discount || 0)
+
+    const getDiscountedPrice = (price: number) => {
+        if (discountPercent <= 0) return price
+        return price - (price * discountPercent) / 100
+    }
+
+    const discountedMinPrice = getDiscountedPrice(Number(product.minPrice || 0))
+    const discountedMaxPrice = getDiscountedPrice(Number(product.maxPrice || 0))
+    const discountedPrice = getDiscountedPrice(Number(product.price || 0))
+
+
+
     return (
         <Link href={`/arcana/product/${product.id}`} className="block h-full">
             <div className="relative overflow-hidden rounded-[30px] md:overflow-visible">
@@ -220,35 +234,6 @@ export default function ArcanaProductCard({ product }: Props) {
                         className="relative z-20 flex flex-1 flex-col p-5"
                         style={{ transform: "translateZ(28px)" }}
                     >
-                        {/* <motion.div
-                            className="flex flex-wrap gap-2"
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true }}
-                            variants={{
-                                hidden: {},
-                                show: {
-                                    transition: {
-                                        staggerChildren: 0.04,
-                                    },
-                                },
-                            }}
-                        >
-                            {product.tags.slice(0, 3).map((tag) => (
-                                <motion.span
-                                    key={tag.ptag_id}
-                                    variants={{
-                                        hidden: { opacity: 0, y: 6 },
-                                        show: { opacity: 1, y: 0 },
-                                    }}
-                                    transition={{ duration: 1 }}
-                                    className="rounded-full border border-sky-100/80 bg-white/72 px-2 py-1 text-[11px] font-medium text-sky-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] backdrop-blur-md"
-                                >
-                                    {tag.ptag_name}
-                                </motion.span>
-                            ))}
-                        </motion.div> */}
-
                         <div className="mt-4 space-y-2">
                             <h3 className="line-clamp-2 min-h-12 text-[15px] font-semibold leading-6 text-slate-900 transition-colors duration-200 group-hover:text-sky-900">
                                 {product.name}
@@ -284,39 +269,40 @@ export default function ArcanaProductCard({ product }: Props) {
 
                         <div className="mt-auto pt-4">
                             <div className="flex items-end justify-between gap-3">
-                                <div className="space-y-1">
+                                <div className="flex h-12 flex-col justify-between">
                                     <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
                                         Price
+                                        {discountPercent > 0 && (
+                                            <span className="ml-1 line-through text-slate-300">
+                                                {product.hasPriceRange
+                                                    ? `${formatPrice(product.minPrice)} - ${formatPrice(product.maxPrice)}`
+                                                    : formatPrice(product.price)}
+                                            </span>
+                                        )}
                                     </p>
 
-                                    {product.hasPriceRange ? (
-                                        <motion.p
-                                            className="text-sm font-semibold text-slate-900"
-                                            whileHover={{ x: 1.5 }}
-                                            transition={{ duration: 0.16 }}
-                                        >
-                                            {formatPrice(product.minPrice)} - {formatPrice(product.maxPrice)}
-                                        </motion.p>
-                                    ) : (
-                                        <motion.p
-                                            className="text-sm font-semibold text-slate-900"
-                                            whileHover={{ x: 1.5 }}
-                                            transition={{ duration: 0.16 }}
-                                        >
-                                            {formatPrice(product.price)}
-                                        </motion.p>
-                                    )}
+                                    <motion.p
+                                        className={`text-base font-bold ${discountPercent > 0 ? "text-red-500" : "text-sky-700"
+                                            }`}
+                                        whileHover={{ x: 1.5 }}
+                                        transition={{ duration: 0.16 }}
+                                    >
+                                        {product.hasPriceRange
+                                            ? discountPercent > 0
+                                                ? `${formatPrice(discountedMinPrice)} - ${formatPrice(discountedMaxPrice)}`
+                                                : `${formatPrice(product.minPrice)} - ${formatPrice(product.maxPrice)}`
+                                            : formatPrice(discountPercent > 0 ? discountedPrice : product.price)}
+                                    </motion.p>
                                 </div>
 
-                                <motion.div
+                                {/* <motion.div
                                     whileHover={{ scale: 1.03 }}
                                     transition={{ duration: 0.18 }}
                                     className="shrink-0 rounded-full border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(239,246,255,0.78),rgba(219,234,254,0.84))] px-3 py-1 text-xs font-semibold text-sky-700 shadow-[0_8px_22px_rgba(59,130,246,0.12),inset_0_1px_0_rgba(255,255,255,0.85)]"
                                 >
                                     Premium
-                                </motion.div>
+                                </motion.div> */}
                             </div>
-
                         </div>
                     </div>
 

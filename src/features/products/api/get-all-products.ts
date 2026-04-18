@@ -1,3 +1,4 @@
+
 import { API_BASE_URL, apiFetch } from "@/lib/api"
 import type { Product } from "@/features/products/types/product"
 import { PRODUCT_TAGS } from "@/lib/tags"
@@ -32,6 +33,7 @@ type ProductShopApiItem = {
     b_id: number | null
     b_name: string | null
     has_price_range: number
+    st_id: number
     tags: ProductTag[]
 }
 
@@ -102,10 +104,12 @@ export async function getAllProducts({
             maxPrice,
             hasPriceRange: Boolean(item.has_price_range),
             discount,
+            categoryId: Number(item.c_id ?? 0),
             website: website as WebsiteKey,
             catalogId: Number(item.ctl_id ?? 0),
             catalogName: String(item.ctl_name ?? ""),
             brandName: String(item.b_name ?? ""),
+            st_id: Number(item.st_id),
             tags: item.tags ?? [],
             isBestSeller: (item.tags ?? []).some(
                 (tag) => tag.ptag_id === PRODUCT_TAGS.BEST_SELLER

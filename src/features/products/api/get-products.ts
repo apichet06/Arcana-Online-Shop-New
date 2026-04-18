@@ -10,20 +10,14 @@ type GetProductsParams = {
   lang?: "th" | "en" | "ja",
   keyword?: string
   sort?: string
+  category?: number
   page?: number
   limit?: number
 }
 
 
 
-export async function getProducts({
-  website,
-  lang = "th",
-  keyword = "",
-  sort = "all",
-  page = 1,
-  limit = 12,
-}: GetProductsParams): Promise<{
+export async function getProducts({ website, lang = "th", keyword = "", sort = "all", page = 1, category, limit = 12, }: GetProductsParams): Promise<{
   items: Product[]
   pagination: {
     total: number
@@ -34,12 +28,18 @@ export async function getProducts({
 }> {
   const ctlId = WEBSITE_CONFIG[website].ctlId
 
-  const params = new URLSearchParams({
-    keyword,
-    sort,
-    page: String(page),
-    limit: String(limit),
-  })
+  const params = new URLSearchParams()
+  if (keyword.trim()) {
+    params.set("keyword", keyword.trim())
+  }
+  if (sort && sort !== "all") {
+    params.set("sort", sort)
+  }
+  if (typeof category === "number" && category > 0) {
+    params.set("category", String(category))
+  }
+  params.set("page", String(page))
+  params.set("limit", String(limit))
 
   const res = await apiFetch<ProductApiResponse>(`/productShop/${lang}?${params.toString()}`)
 

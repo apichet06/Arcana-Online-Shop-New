@@ -103,7 +103,7 @@ export default function ArcanaPageClient() {
                 href="/arcana/view-all?sort=featured"
             />
 
-            <FullWidthHeroSlider />
+            {/* <FullWidthHeroSlider /> */}
             <WhatIsArcanaSection />
         </>
     )
