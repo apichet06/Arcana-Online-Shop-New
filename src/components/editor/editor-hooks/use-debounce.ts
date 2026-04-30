@@ -7,11 +7,13 @@ export function useDebounce<T extends (...args: never[]) => void>(
   maxWait?: number
 ) {
   const funcRef = useRef<T | null>(null)
+  // eslint-disable-next-line react-hooks/refs
   funcRef.current = fn
 
   return useMemo(
     () =>
       debounce(
+        // eslint-disable-next-line react-hooks/refs
         (...args: Parameters<T>) => {
           if (funcRef.current) {
             funcRef.current(...args)

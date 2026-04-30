@@ -33,11 +33,11 @@ import {
   LexicalNode,
 } from "lexical"
 
-import { invariant } from "@/src/components/editor/shared/invariant"
-import { Button } from "@/src/components/ui/button"
-import { DialogFooter } from "@/src/components/ui/dialog"
-import { Input } from "@/src/components/ui/input"
-import { Label } from "@/src/components/ui/label"
+import { invariant } from "@/components/editor/shared/invariant"
+import { Button } from "@/components/ui/button"
+import { DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export type InsertTableCommandPayload = Readonly<{
   columns: string

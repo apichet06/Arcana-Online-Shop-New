@@ -35,20 +35,20 @@ import {
   $createLayoutContainerNode,
   $isLayoutContainerNode,
   LayoutContainerNode,
-} from "@/src/components/editor/nodes/layout-container-node"
+} from "@/components/editor/nodes/layout-container-node"
 import {
   $createLayoutItemNode,
   $isLayoutItemNode,
   LayoutItemNode,
-} from "@/src/components/editor/nodes/layout-item-node"
-import { Button } from "@/src/components/ui/button"
+} from "@/components/editor/nodes/layout-item-node"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/src/components/ui/select"
+} from "@/components/ui/select"
 
 const LAYOUTS = [
   { label: "2 columns (equal width)", value: "1fr 1fr" },

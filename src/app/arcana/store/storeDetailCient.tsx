@@ -11,10 +11,8 @@ import ArcanaProductCard from "@/components/arcana/product/ArcanaProductCard"
 import useProduct from "@/features/products/hooks/use-product"
 import { useCategories } from "@/features/products/hooks/use-categories"
 import { Product } from "@/features/products/types/product"
+import { usePathname, useSearchParams } from "next/navigation"
 
-type Props = {
-    st_id: string
-}
 
 type Category = {
     c_id: number
@@ -53,9 +51,32 @@ function groupCategories(categories: Category[]): CategoryGroup[] {
     )
 }
 
-export default function StoreDetailCient({ st_id }: Props) {
-    const { data, loading } = useStoreShopById(Number(st_id))
+export default function StoreDetailCient() {
+
+    const searchParams = useSearchParams();
+    const pathname = usePathname()
     const { lang } = useLanguage()
+
+
+    const st_id = useMemo(() => {
+        const queryId = searchParams.get("id")
+        if (queryId && !Number.isNaN(Number(queryId))) {
+            return Number(queryId)
+        }
+
+        const segments = pathname.split("/").filter(Boolean)
+        const lastSegment = segments[segments.length - 1]
+
+        if (lastSegment && !Number.isNaN(Number(lastSegment))) {
+            return Number(lastSegment)
+        }
+
+        return undefined
+    }, [searchParams, pathname])
+
+
+    const { data, loading } = useStoreShopById(Number(st_id))
+
     const { data: categories } = useCategories(lang)
     const { data: products = [] } = useProduct({
         website: "arcana",
@@ -147,7 +168,7 @@ export default function StoreDetailCient({ st_id }: Props) {
                 <div className="absolute -left-25 -top-20 h-65 w-65 rounded-full bg-sky-200/35 blur-3xl" />
                 <div className="absolute -right-20 top-27.5 h-55 w-55 rounded-full bg-cyan-200/30 blur-3xl" />
                 <div className="absolute -bottom-22.5 left-[22%] h-55 w-55 rounded-full bg-blue-200/20 blur-3xl" />
-                <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:42px_42px]" />
+                <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-size-[42px_42px]" />
             </div>
 
             <div className="mx-auto max-w-6xl px-4 py-6 md:px-8 md:py-10">

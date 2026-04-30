@@ -21,14 +21,14 @@ import {
   IndentIncreaseIcon,
 } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
-import { getSelectedNode } from "@/src/components/editor/utils/get-selected-node"
-import { Separator } from "@/src/components/ui/separator"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
+import { getSelectedNode } from "@/components/editor/utils/get-selected-node"
+import { Separator } from "@/components/ui/separator"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/src/components/ui/toggle-group"
+} from "@/components/ui/toggle-group"
 
 const ELEMENT_FORMAT_OPTIONS: {
   [key in Exclude<ElementFormatType, "start" | "end" | "">]: {

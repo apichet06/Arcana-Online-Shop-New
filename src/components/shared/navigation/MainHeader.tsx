@@ -7,6 +7,7 @@ import Image from "next/image"
 import { ShoppingBasket } from "lucide-react"
 import ProductSearchForm from "@/components/arcana/product/ProductSearchForm"
 import LanguageSwitcher from "../common/LanguageSwitcher"
+import { Suspense } from "react"
 
 type Props = {
     website: WebsiteConfig
@@ -68,7 +69,11 @@ export default function MainHeader({ website }: Props) {
 
                 {/* Search */}
                 <div className="hidden flex-1 justify-center lg:flex">
-                    <ProductSearchForm className="w-full max-w-md" />
+                    <Suspense fallback={
+                        <div className="h-12 rounded-full bg-slate-100 animate-pulse" />
+                    }>
+                        <ProductSearchForm />
+                    </Suspense>
                 </div>
 
                 {/* Right actions */}

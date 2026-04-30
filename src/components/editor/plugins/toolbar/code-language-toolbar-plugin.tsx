@@ -16,14 +16,14 @@ import {
   BaseSelection,
 } from "lexical"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/src/components/ui/select"
+} from "@/components/ui/select"
 
 function getCodeLanguageOptions(): [string, string][] {
   const options: [string, string][] = []
@@ -53,9 +53,9 @@ export function CodeLanguageToolbarPlugin() {
         anchorNode.getKey() === "root"
           ? anchorNode
           : $findMatchingParent(anchorNode, (e) => {
-              const parent = e.getParent()
-              return parent !== null && $isRootOrShadowRoot(parent)
-            })
+            const parent = e.getParent()
+            return parent !== null && $isRootOrShadowRoot(parent)
+          })
 
       if (element === null) {
         element = anchorNode.getTopLevelElementOrThrow()

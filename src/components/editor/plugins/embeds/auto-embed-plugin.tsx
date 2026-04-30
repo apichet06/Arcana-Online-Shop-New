@@ -18,25 +18,26 @@ import {
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext"
 import { PopoverPortal } from "@radix-ui/react-popover"
 import type { LexicalEditor } from "lexical"
-import { TwitterIcon, YoutubeIcon } from "lucide-react"
 
-import { useEditorModal } from "@/src/components/editor/editor-hooks/use-modal"
-import { INSERT_TWEET_COMMAND } from "@/src/components/editor/plugins/embeds/twitter-plugin"
-import { INSERT_YOUTUBE_COMMAND } from "@/src/components/editor/plugins/embeds/youtube-plugin"
-import { Button } from "@/src/components/ui/button"
+
+import { useEditorModal } from "@/components/editor/editor-hooks/use-modal"
+import { INSERT_TWEET_COMMAND } from "@/components/editor/plugins/embeds/twitter-plugin"
+import { INSERT_YOUTUBE_COMMAND } from "@/components/editor/plugins/embeds/youtube-plugin"
+import { Button } from "@/components/ui/button"
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@/src/components/ui/command"
-import { DialogFooter } from "@/src/components/ui/dialog"
-import { Input } from "@/src/components/ui/input"
+} from "@/components/ui/command"
+import { DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/src/components/ui/popover"
+} from "@/components/ui/popover"
+import { FaTwitter, FaYoutube } from "react-icons/fa"
 
 export interface CustomEmbedConfig extends EmbedConfig {
   // Human readable name of the embeded content e.g. Tweet or Google Map.
@@ -61,7 +62,7 @@ export const YoutubeEmbedConfig: CustomEmbedConfig = {
   exampleUrl: "https://www.youtube.com/watch?v=jNQXAC9IVRw",
 
   // Icon for display.
-  icon: <YoutubeIcon className="size-4" />,
+  icon: <FaYoutube className="size-4" />,
 
   insertNode: (editor: LexicalEditor, result: EmbedMatchResult) => {
     editor.dispatchCommand(INSERT_YOUTUBE_COMMAND, result.id)
@@ -96,7 +97,7 @@ export const TwitterEmbedConfig: CustomEmbedConfig = {
   exampleUrl: "https://twitter.com/jack/status/20",
 
   // Icon for display.
-  icon: <TwitterIcon className="size-4" />,
+  icon: <FaTwitter className="size-4" />,
 
   // Create the Lexical embed node from the url data.
   insertNode: (editor: LexicalEditor, result: EmbedMatchResult) => {

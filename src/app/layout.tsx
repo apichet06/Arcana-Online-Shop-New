@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/arcana/product/ScrollToTop";
+import { Suspense } from "react";
 
 const kanit = Kanit({
   subsets: ["thai"],
@@ -24,7 +25,9 @@ export default function RootLayout({
       className={`${kanit.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ScrollToTop />
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
         {children}
 
       </body>

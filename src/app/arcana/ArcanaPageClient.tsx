@@ -13,6 +13,7 @@ import { getCookie, getInitialLanguage } from "@/lib/cookies"
 import { Category } from "@/features/products/types/category"
 import { getCategories } from "@/features/products/api/get-category"
 import ArcanaCategorySection from "@/components/arcana/product/ArcanaCategorySection"
+import useProduct from "@/features/products/hooks/use-product"
 
 type HomeProductsResult = {
     bestSeller: Product[]
@@ -41,6 +42,7 @@ export default function ArcanaPageClient() {
                 website: "arcana",
                 lang,
             })
+            console.log(result);
 
             if (!cancelled) {
                 setData(result)
@@ -70,6 +72,7 @@ export default function ArcanaPageClient() {
     }
 
     const { bestSeller, newProducts, featuredProducts } = data
+
 
     return (
         <>

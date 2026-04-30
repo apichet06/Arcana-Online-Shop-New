@@ -15,12 +15,12 @@ import {
   UnderlineIcon,
 } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
 import {
   ToggleGroup,
   ToggleGroupItem,
-} from "@/src/components/ui/toggle-group"
+} from "@/components/ui/toggle-group"
 
 const FORMATS = [
   { format: "bold", icon: BoldIcon, label: "Bold" },

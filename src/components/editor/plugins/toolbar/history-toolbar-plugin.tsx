@@ -12,9 +12,9 @@ import {
 } from "lexical"
 import { RedoIcon, UndoIcon } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { Button } from "@/src/components/ui/button"
-import { ButtonGroup } from "@/src/components/ui/button-group"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
 
 export function HistoryToolbarPlugin() {
   const [editor] = useLexicalComposerContext()

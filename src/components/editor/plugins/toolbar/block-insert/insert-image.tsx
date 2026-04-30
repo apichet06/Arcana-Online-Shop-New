@@ -2,9 +2,9 @@
 
 import { ImageIcon } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { InsertImageDialog } from "@/src/components/editor/plugins/images-plugin"
-import { SelectItem } from "@/src/components/ui/select"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { InsertImageDialog } from "@/components/editor/plugins/images-plugin"
+import { SelectItem } from "@/components/ui/select"
 
 export function InsertImage() {
   const { activeEditor, showModal } = useToolbarContext()
@@ -12,7 +12,7 @@ export function InsertImage() {
   return (
     <SelectItem
       value="image"
-      onPointerUp={(e) => {
+      onPointerUp={() => {
         showModal("Insert Image", (onClose) => (
           <InsertImageDialog activeEditor={activeEditor} onClose={onClose} />
         ))

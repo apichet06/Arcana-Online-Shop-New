@@ -2,9 +2,9 @@
 
 import { INSERT_EMBED_COMMAND } from "@lexical/react/LexicalAutoEmbedPlugin"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { EmbedConfigs } from "@/src/components/editor/plugins/embeds/auto-embed-plugin"
-import { SelectItem } from "@/src/components/ui/select"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { EmbedConfigs } from "@/components/editor/plugins/embeds/auto-embed-plugin"
+import { SelectItem } from "@/components/ui/select"
 
 export function InsertEmbeds() {
   const { activeEditor } = useToolbarContext()

@@ -14,7 +14,7 @@ import { TableCellNode, TableNode, TableRowNode } from "@lexical/table"
 import { AutoLinkNode, LinkNode } from "@lexical/link"
 
 // ใช้ theme เดิมของคุณ
-// import { editorTheme } from "@/src/components/editor/themes/editor-theme"
+// import { editorTheme } from "@/components/editor/themes/editor-theme"
 
 // ถ้ามี custom node เดิมในระบบคุณ ให้ใส่ตามนี้
 
@@ -24,6 +24,7 @@ import { YouTubeNode } from "@/components/editor/nodes/embeds/youtube-node"
 import { ImageNode } from "@/components/editor/nodes/image-node"
 import { LayoutContainerNode } from "@/components/editor/nodes/layout-container-node"
 import { LayoutItemNode } from "@/components/editor/nodes/layout-item-node"
+import { TikTokNode } from "@/components/editor/nodes/embeds/tiktok-node"
 
 type Props = {
     value?: string | null
@@ -56,6 +57,7 @@ export default function ProductDescriptionLexical({ value }: Props) {
                 AutoLinkNode,
                 TweetNode,
                 YouTubeNode,
+                TikTokNode,
                 ImageNode,
                 ListNode,
                 ListItemNode,

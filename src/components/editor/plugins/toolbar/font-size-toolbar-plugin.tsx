@@ -8,11 +8,11 @@ import {
 import { $getSelection, $isRangeSelection, BaseSelection } from "lexical"
 import { Minus, Plus } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
-import { Button } from "@/src/components/ui/button"
-import { ButtonGroup } from "@/src/components/ui/button-group"
-import { Input } from "@/src/components/ui/input"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
+import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
+import { Input } from "@/components/ui/input"
 
 const DEFAULT_FONT_SIZE = 16
 const MIN_FONT_SIZE = 1

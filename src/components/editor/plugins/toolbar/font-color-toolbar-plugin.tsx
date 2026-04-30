@@ -8,8 +8,8 @@ import {
 import { $getSelection, $isRangeSelection, BaseSelection } from "lexical"
 import { BaselineIcon } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
 import {
   ColorPicker,
   ColorPickerAlphaSlider,
@@ -20,8 +20,8 @@ import {
   ColorPickerHueSlider,
   ColorPickerInput,
   ColorPickerTrigger,
-} from "@/src/components/editor/editor-ui/color-picker"
-import { Button } from "@/src/components/ui/button"
+} from "@/components/editor/editor-ui/color-picker"
+import { Button } from "@/components/ui/button"
 
 export function FontColorToolbarPlugin() {
   const { activeEditor } = useToolbarContext()
@@ -86,7 +86,7 @@ export function FontColorToolbarPlugin() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <ColorPickerFormatSelect />
+          <ColorPickerFormatSelect className={undefined} size={undefined} />
           <ColorPickerInput />
         </div>
       </ColorPickerContent>

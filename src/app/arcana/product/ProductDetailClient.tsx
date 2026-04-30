@@ -13,10 +13,7 @@ import { API_BASE_URL } from "@/lib/api"
 import { getDiscountedPrice } from "@/lib/format-price"
 import { useProductById } from "@/features/products/hooks/use-productById"
 import { useLanguage } from "@/features/products/hooks/use-language"
-
-type Props = {
-    id: number
-}
+import { usePathname, useSearchParams } from "next/navigation"
 
 function toImageUrl(path?: string | null) {
     if (!path) return "/images/placeholder.png"
@@ -83,12 +80,30 @@ function parseVariantLabel(label?: string | null) {
 
 
 
-export default function ProductDetailClient({ id }: Props) {
+export default function ProductDetailClient() {
 
-
+    const searchParams = useSearchParams();
+    const pathname = usePathname()
 
     const { lang } = useLanguage()
-    const { data } = useProductById(id, lang)
+
+    const productId = useMemo(() => {
+        const queryId = searchParams.get("id")
+        if (queryId && !Number.isNaN(Number(queryId))) {
+            return Number(queryId)
+        }
+
+        const segments = pathname.split("/").filter(Boolean)
+        const lastSegment = segments[segments.length - 1]
+
+        if (lastSegment && !Number.isNaN(Number(lastSegment))) {
+            return Number(lastSegment)
+        }
+
+        return undefined
+    }, [searchParams, pathname])
+
+    const { data } = useProductById(Number(productId), lang)
 
     const [selectedImage, setSelectedImage] = useState("")
     const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null)
@@ -549,7 +564,7 @@ export default function ProductDetailClient({ id }: Props) {
 
                         <div className="mt-6 space-y-5">
                             {/* STORE CARD */}
-                            <motion.div
+                            {/* <motion.div
                                 initial={{ opacity: 0, y: 22 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
@@ -558,15 +573,15 @@ export default function ProductDetailClient({ id }: Props) {
                                 <Link href={`/arcana/store/${product.st_id}`} className="block group">
                                     <div
                                         className="
-                            relative overflow-hidden rounded-2xl
-                            border border-sky-100/80
-                            bg-linear-to-br from-sky-50 via-white to-blue-50
-                            p-5 shadow-[0_18px_60px_rgba(14,165,233,0.08)]
-                            transition-all duration-300
-                            group-hover:-translate-y-1
-                            group-hover:shadow-[0_24px_70px_rgba(14,165,233,0.14)]
-                            md:p-6
-                        "
+                                                    relative overflow-hidden rounded-2xl
+                                                    border border-sky-100/80
+                                                    bg-linear-to-br from-sky-50 via-white to-blue-50
+                                                    p-5 shadow-[0_18px_60px_rgba(14,165,233,0.08)]
+                                                    transition-all duration-300
+                                                    group-hover:-translate-y-1
+                                                    group-hover:shadow-[0_24px_70px_rgba(14,165,233,0.14)]
+                                                    md:p-6
+                                                "
                                     >
                                         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.9),transparent_35%)]" />
 
@@ -609,7 +624,7 @@ export default function ProductDetailClient({ id }: Props) {
                                         </div>
                                     </div>
                                 </Link>
-                            </motion.div>
+                            </motion.div> */}
 
                             {/* SUPPORTING CARDS */}
                             <div className="grid gap-4 lg:grid-cols-2">
@@ -642,20 +657,20 @@ export default function ProductDetailClient({ id }: Props) {
                                                     transition={{ duration: 0.3, delay: 0.05 * index }}
                                                 >
                                                     <Link
-                                                        href={`/arcana/lp/${lp.lp_slug}`}
+                                                        href={`/arcana/lp?slug=${lp.lp_slug}`}
                                                         className="group inline-flex"
                                                     >
                                                         <span
                                                             className="
-                                                inline-flex items-center gap-2 rounded-full
-                                                border border-emerald-100 bg-emerald-50
-                                                px-3 py-1.5 text-xs font-medium text-emerald-700
-                                                transition-all duration-200
-                                                hover:-translate-y-0.5
-                                                hover:border-emerald-200
-                                                hover:bg-emerald-100
-                                                hover:shadow-[0_8px_20px_rgba(16,185,129,0.12)]
-                                            "
+                                                            inline-flex items-center gap-2 rounded-full
+                                                            border border-emerald-100 bg-emerald-50
+                                                            px-3 py-1.5 text-xs font-medium text-emerald-700
+                                                            transition-all duration-200
+                                                            hover:-translate-y-0.5
+                                                            hover:border-emerald-200
+                                                            hover:bg-emerald-100
+                                                            hover:shadow-[0_8px_20px_rgba(16,185,129,0.12)]
+                                                        "
                                                         >
                                                             <span className="line-clamp-1">{lp.lp_title}</span>
                                                             <span className="text-[10px] opacity-60 transition-transform duration-200 group-hover:translate-x-0.5">

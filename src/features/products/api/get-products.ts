@@ -57,7 +57,7 @@ export async function getHomeProducts({
   website,
   lang = "th",
 }: GetProductsParams) {
-  const products = await getProducts({ website, lang })
+  const products = await getProducts({ website, lang, limit: 999 })
 
   return {
     bestSeller: products.items.filter((product) =>

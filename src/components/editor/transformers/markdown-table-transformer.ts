@@ -23,8 +23,8 @@ import {
 import { $isParagraphNode, $isTextNode, LexicalNode } from "lexical"
 
 // import { EMOJI } from "@/registry/new-york-v4/editor/transformers/markdown-emoji-transformer"
-// import { HR } from "@/src/components/editor/transformers/markdown-hr-transformer"
-import { IMAGE } from "@/src/components/editor/transformers/markdown-image-transformer"
+// import { HR } from "@/components/editor/transformers/markdown-hr-transformer"
+import { IMAGE } from "@/components/editor/transformers/markdown-image-transformer"
 
 // import { TWEET } from "@/registry/new-york-v4/editor/transformers/markdown-tweet-transformer"
 

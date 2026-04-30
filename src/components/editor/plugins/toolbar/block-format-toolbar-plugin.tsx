@@ -5,15 +5,15 @@ import { $isHeadingNode } from "@lexical/rich-text"
 import { $findMatchingParent, $getNearestNodeOfType } from "@lexical/utils"
 import { $isRangeSelection, $isRootOrShadowRoot, BaseSelection } from "lexical"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
-import { blockTypeToBlockName } from "@/src/components/editor/plugins/toolbar/block-format/block-format-data"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
+import { blockTypeToBlockName } from "@/components/editor/plugins/toolbar/block-format/block-format-data"
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectTrigger,
-} from "@/src/components/ui/select"
+} from "@/components/ui/select"
 
 export function BlockFormatDropDown({
   children,
@@ -29,9 +29,9 @@ export function BlockFormatDropDown({
         anchorNode.getKey() === "root"
           ? anchorNode
           : $findMatchingParent(anchorNode, (e) => {
-              const parent = e.getParent()
-              return parent !== null && $isRootOrShadowRoot(parent)
-            })
+            const parent = e.getParent()
+            return parent !== null && $isRootOrShadowRoot(parent)
+          })
 
       if (element === null) {
         element = anchorNode.getTopLevelElementOrThrow()
@@ -68,7 +68,7 @@ export function BlockFormatDropDown({
   return (
     <Select
       value={blockType}
-      onValueChange={(value) => {
+      onValueChange={(value: string) => {
         setBlockType(value as keyof typeof blockTypeToBlockName)
       }}
     >

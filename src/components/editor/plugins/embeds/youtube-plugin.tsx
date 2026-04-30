@@ -15,7 +15,7 @@ import { COMMAND_PRIORITY_EDITOR, createCommand, LexicalCommand } from "lexical"
 import {
   $createYouTubeNode,
   YouTubeNode,
-} from "@/src/components/editor/nodes/embeds/youtube-node"
+} from "@/components/editor/nodes/embeds/youtube-node"
 
 export const INSERT_YOUTUBE_COMMAND: LexicalCommand<string> = createCommand(
   "INSERT_YOUTUBE_COMMAND"

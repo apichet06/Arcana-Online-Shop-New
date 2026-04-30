@@ -15,7 +15,7 @@ import { COMMAND_PRIORITY_EDITOR, createCommand, LexicalCommand } from "lexical"
 import {
   $createTweetNode,
   TweetNode,
-} from "@/src/components/editor/nodes/embeds/tweet-node"
+} from "@/components/editor/nodes/embeds/tweet-node"
 
 export const INSERT_TWEET_COMMAND: LexicalCommand<string> = createCommand(
   "INSERT_TWEET_COMMAND"

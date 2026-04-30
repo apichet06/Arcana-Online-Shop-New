@@ -35,18 +35,18 @@ import {
   $isImageNode,
   ImageNode,
   ImagePayload,
-} from "@/src/components/editor/nodes/image-node"
-import { CAN_USE_DOM } from "@/src/components/editor/shared/can-use-dom"
-import { Button } from "@/src/components/ui/button"
-import { DialogFooter } from "@/src/components/ui/dialog"
-import { Input } from "@/src/components/ui/input"
-import { Label } from "@/src/components/ui/label"
+} from "@/components/editor/nodes/image-node"
+import { CAN_USE_DOM } from "@/components/editor/shared/can-use-dom"
+import { Button } from "@/components/ui/button"
+import { DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/src/components/ui/tabs"
+} from "@/components/ui/tabs"
 
 export type InsertImagePayload = Readonly<ImagePayload>
 

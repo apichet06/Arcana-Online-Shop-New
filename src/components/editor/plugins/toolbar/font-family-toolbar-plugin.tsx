@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { SetStateAction, useCallback, useState } from "react"
 import {
   $getSelectionStyleValueForProperty,
   $patchStyleText,
@@ -8,14 +8,14 @@ import {
 import { $getSelection, $isRangeSelection, BaseSelection } from "lexical"
 import { TypeIcon } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-} from "@/src/components/ui/select"
+} from "@/components/ui/select"
 
 const FONT_FAMILY_OPTIONS = [
   "Arial",
@@ -61,7 +61,8 @@ export function FontFamilyToolbarPlugin() {
   return (
     <Select
       value={fontFamily}
-      onValueChange={(value) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onValueChange={(value: SetStateAction<any>) => {
         setFontFamily(value)
         handleClick(value)
       }}

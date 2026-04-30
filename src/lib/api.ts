@@ -1,6 +1,5 @@
 import { API_BASE_URL } from "./api_base"
 
-
 type FetchOptions = RequestInit & {
     next?: NextFetchRequestConfig
 }
@@ -10,12 +9,18 @@ export async function apiFetch<T>(path: string, options?: FetchOptions): Promise
     console.log("API_BASE_URL:", API_BASE_URL)
     console.log("FETCH URL:", url)
 
+    const headers = new Headers(options?.headers)
+
+    // const method = (options?.method || "GET").toUpperCase()
+    const hasBody = options?.body != null
+
+    if (hasBody && !headers.has("Content-Type")) {
+        headers.set("Content-Type", "application/json")
+    }
+
     const response = await fetch(url, {
         ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...(options?.headers || {}),
-        },
+        headers,
         next: options?.next ?? { revalidate: 60 },
     })
 

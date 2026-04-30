@@ -10,11 +10,11 @@ import {
 } from "lexical"
 import { LinkIcon } from "lucide-react"
 
-import { useToolbarContext } from "@/src/components/editor/context/toolbar-context"
-import { useUpdateToolbarHandler } from "@/src/components/editor/editor-hooks/use-update-toolbar"
-import { getSelectedNode } from "@/src/components/editor/utils/get-selected-node"
-import { sanitizeUrl } from "@/src/components/editor/utils/url"
-import { Toggle } from "@/src/components/ui/toggle"
+import { useToolbarContext } from "@/components/editor/context/toolbar-context"
+import { useUpdateToolbarHandler } from "@/components/editor/editor-hooks/use-update-toolbar"
+import { getSelectedNode } from "@/components/editor/utils/get-selected-node"
+import { sanitizeUrl } from "@/components/editor/utils/url"
+import { Toggle } from "@/components/ui/toggle"
 
 export function LinkToolbarPlugin({
   setIsLinkEditMode,

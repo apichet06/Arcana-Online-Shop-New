@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo } from "react"
+import { Suspense, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, Variants } from "framer-motion"
 import ArcanaProductCard from "@/components/arcana/product/ArcanaProductCard"
@@ -188,7 +188,7 @@ export default function ViewAllClient() {
 
     const { lang } = useLanguage()
     const { data: categories } = useCategories(lang)
-    const { data: products } = useProduct({ website: "arcana", lang, page, limit: 9999 })
+    const { data: products } = useProduct({ website: "arcana", lang, page: 1, limit: 9999 })
 
     const groupedCategories = useMemo(() => groupCategories(categories), [categories])
 
@@ -421,7 +421,12 @@ export default function ViewAllClient() {
                                 </div>
 
                                 <div className="w-full md:max-w-md">
-                                    <ProductSearchForm />
+                                    <Suspense fallback={
+                                        <div className="h-12 rounded-full bg-slate-100 animate-pulse" />
+                                    }>
+                                        <ProductSearchForm />
+                                    </Suspense>
+
                                 </div>
                             </div>
                         </div>
